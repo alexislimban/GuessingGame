@@ -19,24 +19,14 @@ public class GuessingGame {
 		List<Integer> guessedNumbers = new ArrayList<>();
 		List<String> pastRecord = new ArrayList<>();
 
-		System.out.println(randguess);
-
 		while (userguess != -1) {
 			if (userguess == randguess) {
 				guesses++;
 				guessedNumbers.add(userguess);
 				System.out.println("All guessed numbers: " + guessedNumbers);
 				System.out.println("You guessed right, you won! It took you " + guesses + " tries!");
-				pastRecord.add("Amount of guesses: " + guesses + ". The list of guessed numbers: " + guessedNumbers + ". Winning number: " + randguess);
-				try {
-					FileWriter fileWrite = new FileWriter("pastRecord.txt", true);
-					fileWrite.append(pastRecord.toString() + "\n");
-					fileWrite.close();
-					System.out.println("Successfully wrote to the file.");
-				} catch (IOException e) {
-					System.out.println("An error occurred.");
-					e.printStackTrace();
-				}
+				pastRecord.add("Amount of guesses: " + guesses + ". The list of guessed numbers: " + guessedNumbers + ". Winning number: " + randguess + ". User won!");
+				writeFile(pastRecord.toString());
 				break;
 			} else {
 				if(guessedNumbers.contains(userguess)) {
@@ -55,6 +45,24 @@ public class GuessingGame {
 					userguess = sc.nextInt();
 				}
 			}
+		}
+		if(userguess == -1) {
+			System.out.println("All guessed numbers: " + guessedNumbers);
+			System.out.println("Looks like you gave up. You have tried " + guesses + " times!");
+			pastRecord.add("Amount of guesses: " + guesses + ". The list of guessed numbers: " + guessedNumbers + ". Winning number: " + randguess + ". User lost/gave up!");
+			writeFile(pastRecord.toString());
+		}
+	}
+
+	public static void writeFile(String string) {
+		try {
+			FileWriter fileWrite = new FileWriter("pastRecord.txt", true);
+			fileWrite.append(string + "\n");
+			fileWrite.close();
+			System.out.println("Successfully wrote to the file.");
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
 		}
 	}
 }
