@@ -1,46 +1,60 @@
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Random;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GuessingGame {
-	public static void main(String[]args) {
-		
+	public static void main(String[] args) {
 		Random rand = new Random();
-		int upperbound = 100;
-		
-		int guessNum = rand.nextInt(upperbound);
-		
 		Scanner sc = new Scanner(System.in);
-		
-		//how many
-		System.out.println("Enter how many trials you want:");
-		int k = sc.nextInt();
-		
-		int i;
-		int selectNum = 0;
-		int specialNum = -1;
-		
-		for( i = 0; i < k; i++) {
-			
-		System.out.println("Choose an integer between 1-100:");
-		selectNum = sc.nextInt();
-	
-			
-			if ( guessNum == selectNum) {
-				System.out.println("Congratulations, you guess the number");
-				System.exit(0);
+
+		int randguess = rand.nextInt(((100 - 1) + 1) + 1);
+
+		System.out.println("Enter an integer: ");
+		int userguess = sc.nextInt();
+
+		int guesses = 0;
+		List<Integer> guessedNumbers = new ArrayList<>();
+		List<String> pastRecord = new ArrayList<>();
+
+		System.out.println(randguess);
+
+		while (userguess != -1) {
+			if (userguess == randguess) {
+				guesses++;
+				guessedNumbers.add(userguess);
+				System.out.println("All guessed numbers: " + guessedNumbers);
+				System.out.println("You guessed right, you won! It took you " + guesses + " tries!");
+				pastRecord.add("Amount of guesses: " + guesses + ". The list of guessed numbers: " + guessedNumbers + ". Winning number: " + randguess);
+				try {
+					FileWriter fileWrite = new FileWriter("pastRecord.txt", true);
+					fileWrite.append(pastRecord.toString() + "\n");
+					fileWrite.close();
+					System.out.println("Successfully wrote to the file.");
+				} catch (IOException e) {
+					System.out.println("An error occurred.");
+					e.printStackTrace();
+				}
 				break;
+			} else {
+				if(guessedNumbers.contains(userguess)) {
+					System.out.println("All guessed numbers: " + guessedNumbers);
+					System.out.println("Already guessed that number, please enter another one");
+					userguess = sc.nextInt();
+				} else if(userguess < 1 || userguess > 100) {
+					System.out.println("All guessed numbers: " + guessedNumbers);
+					System.out.println("Number should be between 1 and 100, please enter another one");
+					userguess = sc.nextInt();
+				} else {
+					guesses++;
+					guessedNumbers.add(userguess);
+					System.out.println("All guessed numbers: " + guessedNumbers);
+					System.out.println("Wrong number, please enter another one");
+					userguess = sc.nextInt();
+				}
 			}
-	
-			else if ( guessNum > selectNum && i != k -1) {
-				System.out.println("The Answer is Greater than "+ selectNum);
-			}
-			
-			else if ( guessNum < selectNum && i != k-1) {
-				System.out.println("The Answer is Less than "+ selectNum);
-			}
-			
-			}
-		System.out.println("The correct answer is "+ guessNum+ " :(");
-		
+		}
 	}
 }
