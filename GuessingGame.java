@@ -1,3 +1,6 @@
+/*
+Alexander Mikhalkov, Alexis Limban, Derek Lucas, Grigory Mironovich, Oluwayelemi Olorunleke
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
